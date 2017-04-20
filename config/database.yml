@@ -11,11 +11,12 @@ default: &default
   username: rails_admin
   timeout: 5000
   reaping_freaquency: 30
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") {5} %>
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') {5} %>
 
 development:
   <<: *default
   database: rails_development
+  password: <%= Rails.application.secrets[:database][:password] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,6 +24,7 @@ development:
 test:
   <<: *default
   database: rails_test
+  password: <%= Rails.application.secrets[:database][:password] %>
 
 production:
   <<: *default
