@@ -1,0 +1,30 @@
+# SQLite version 3.x
+#   gem install sqlite3
+#
+#   Ensure the SQLite 3 gem is defined in your Gemfile
+#   gem 'sqlite3'
+#
+default: &default
+  host: localhost
+  adapter: postgresql
+  encoding: UTF8
+  username: rails_admin
+  timeout: 5000
+  reaping_freaquency: 30
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") {5} %>
+
+development:
+  <<: *default
+  database: rails_development
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: rails_test
+
+production:
+  <<: *default
+  database: rails_production
+  password: <%= ENV['EXERCISE_DATABASE_PASSWORD'] %>
