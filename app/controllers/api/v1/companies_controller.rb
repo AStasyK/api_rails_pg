@@ -1,5 +1,5 @@
 class Api::V1::CompaniesController < ApplicationController
-  before_action :set_company, only: %i[show update destroy]
+  before_action :set_company, only: %i[show update mark_destroy]
 
   def index
     @companies = Company.all
@@ -28,11 +28,16 @@ class Api::V1::CompaniesController < ApplicationController
     end
   end
 
-  def destroy
-    if @company.destroy
-      render json: { status: :deleted }
+  def mark_destroy
+    #метод не удаляет компанию на совсем, а отмечает ее как удаленную
+    if @company.deleted
+      render json: { deleted_company: [], deleted_already: :not_modified}
     else
-      render json: { errors: @company.errors, status: :unprocessable_entity }
+      @company.delete_company
+      render json: { deleted_company: @company,
+                     code: 200,
+                     status: :success },
+             except: [ :created_at, :updated_at ]
     end
   end
 
